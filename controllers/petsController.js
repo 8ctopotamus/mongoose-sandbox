@@ -60,4 +60,26 @@ module.exports = {
       res.status(500).json(err)
     }
   },
+  addColor: async function(req, res) {
+    const petId = req.params.id
+    const newColor = req.body.color
+    const updatedPet = await Pet.findByIdAndUpdate(
+      petId,
+      { $addToSet: { colors: newColor } },
+      { new: true }
+    )
+    res.json(updatedPet)
+  },
+  removeColor: async function(req, res) {
+    const petId = req.params.id
+    const colorToRemove = req.body.color
+
+    const updatedPet = await Pet.findByIdAndUpdate(
+      petId,
+      { $pull: { colors: { $eq: colorToRemove } } },
+      { new: true }
+    )
+
+    res.json(updatedPet)
+  }
 }
